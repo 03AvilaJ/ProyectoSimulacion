@@ -62,14 +62,14 @@ class EnergyConsumptionSimulation:
         property.set_solar_panel = self.generate_solar_panel()
 
     def build_property(self, property_under_construction):
-        light_consumption = self.calculate_monthly_consumption(
-            property_under_construction
-        )
-        solar_panel = self.add_solar_panel_to_property(
+        self.calculate_monthly_consumption(property_under_construction)
+        self.add_solar_panel_to_property(
             property_under_construction
         )  # Recordar que es opcional
         completed_property = Property(
-            property_under_construction.get_devices, light_consumption, solar_panel
+            property_under_construction.get_devices,
+            property_under_construction.get_light_consumption,
+            property_under_construction.get_solar_panel,
         )
 
         return completed_property
@@ -92,3 +92,4 @@ print(energy_consumption.generate_device("Computador", 3))
 # print(energy_consumption.generate_solar_panel())
 # energy_consumption.add_solar_panel_to_property(energy_consumption.generate_property())
 # print(energy_consumption.generate_property().get_solar_panel)
+print(energy_consumption.build_property(energy_consumption.generate_property()))
