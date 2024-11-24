@@ -1,5 +1,5 @@
 class Device:
-    def __init__(self, device_type, consumptiom, amount):
+    def __init__(self, device_type, consumptiom, amount, average_use):
         self._device_type = device_type
         self._consumption = consumptiom
         self._amount = amount

@@ -1,8 +1,43 @@
 class SolarPanel:
-    def __init__(self, voltage, inverter, battery=None):
+    def __init__(
+        self,
+        active_area,
+        efficiency,
+        solar_radiaton,
+        voltage,
+        inverter=None,
+        battery=None,
+    ):
+        self._active_area = active_area
+        self._efficiency = efficiency
+        self._solar_radiaton = solar_radiaton
         self._voltage = voltage
         self._inverter = inverter
         self._battery = battery
+
+    @property
+    def get_active_area(self):
+        return self._active_area
+
+    @get_active_area
+    def set_active_area(self, new_area):
+        self._active_area = new_area
+
+    @property
+    def get_efficiency(self):
+        return self._efficiency
+
+    @get_efficiency
+    def set_efficiency(self, new_efficiency):
+        self._efficiency = new_efficiency
+
+    @property
+    def get_solar_radiaton(self):
+        return self.get_solar_radiaton
+
+    @get_solar_radiaton
+    def set_solar_radiaton(self, new_solar_radiaton):
+        self._solar_radiaton = new_solar_radiaton
 
     @property
     def get_voltage(self):

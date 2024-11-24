@@ -1,5 +1,5 @@
 class Property:
-    def __init__(self, light_consumption, devices, solar_panel=None):
+    def __init__(self, devices, light_consumption=None, solar_panel=None):
         self._light_consumption = light_consumption
         self._devices = devices
         self._solar_panel = solar_panel
