@@ -1,4 +1,4 @@
-from ..models import Device, Property, RandomGenerator, SolarPanel
+from ..models import Device, Property, RandomGenerator, SolarPanel, simulate_weather
 
 
 class EnergyConsumptionSimulation:
@@ -41,6 +41,39 @@ class EnergyConsumptionSimulation:
         property.set_light_consumption = total_consume
         return total_consume
 
+    def get_radiation(self):
+        simulate_weather_radiation = simulate_weather(30)
+        for day, weather in enumerate(simulate_weather_radiation, start=1):
+
+            return weather["Radiación"]
+
+    def generate_solar_panel(self, active_area=1.6):
+        random_efficiency = self.random_generator.generate_in_range(15, 22)
+        radiation = self.get_radiation()
+        new_solar_panel = SolarPanel(active_area, random_efficiency, radiation)
+
+        return (
+            new_solar_panel.get_active_area,
+            new_solar_panel.get_efficiency,
+            new_solar_panel.get_solar_radiaton,
+        )
+
+    def add_solar_panel_to_property(self, property):
+        property.set_solar_panel = self.generate_solar_panel()
+
+    def build_property(self, property_under_construction):
+        light_consumption = self.calculate_monthly_consumption(
+            property_under_construction
+        )
+        solar_panel = self.add_solar_panel_to_property(
+            property_under_construction
+        )  # Recordar que es opcional
+        completed_property = Property(
+            property_under_construction.get_devices, light_consumption, solar_panel
+        )
+
+        return completed_property
+
 
 energy_consumption = EnergyConsumptionSimulation()
 print(energy_consumption.generate_device("nevera", 1))
@@ -49,9 +82,13 @@ print(energy_consumption.generate_device("Freidora de aire", 1))
 print(energy_consumption.generate_device("Televisor", 2))
 print(energy_consumption.generate_device("Computador", 3))
 # print(energy_consumption.save_device())
-print(
-    "Consumo de un mes: ",
-    energy_consumption.calculate_monthly_consumption(
-        energy_consumption.generate_property()
-    ),
-)
+# print(
+#     "Consumo de un mes: ",
+#     energy_consumption.calculate_monthly_consumption(
+#         energy_consumption.generate_property()
+#     ),
+# )
+
+# print(energy_consumption.generate_solar_panel())
+# energy_consumption.add_solar_panel_to_property(energy_consumption.generate_property())
+# print(energy_consumption.generate_property().get_solar_panel)

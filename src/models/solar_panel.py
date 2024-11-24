@@ -4,7 +4,7 @@ class SolarPanel:
         active_area,
         efficiency,
         solar_radiaton,
-        voltage,
+        voltage=0,
         inverter=None,
         battery=None,
     ):
@@ -19,7 +19,7 @@ class SolarPanel:
     def get_active_area(self):
         return self._active_area
 
-    @get_active_area
+    @get_active_area.setter
     def set_active_area(self, new_area):
         self._active_area = new_area
 
@@ -27,15 +27,15 @@ class SolarPanel:
     def get_efficiency(self):
         return self._efficiency
 
-    @get_efficiency
+    @get_efficiency.setter
     def set_efficiency(self, new_efficiency):
         self._efficiency = new_efficiency
 
     @property
     def get_solar_radiaton(self):
-        return self.get_solar_radiaton
+        return self._solar_radiaton
 
-    @get_solar_radiaton
+    @get_solar_radiaton.setter
     def set_solar_radiaton(self, new_solar_radiaton):
         self._solar_radiaton = new_solar_radiaton
 

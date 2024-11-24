@@ -44,11 +44,14 @@ radiation = {
 def simulate_weather(days, initial_state="Soleado"):
     current_state = initial_state
     weather_log = []
+    radiation_log = []
 
     for _ in range(days):
         weather_log.append(
             {"Estado": current_state, "Radiación": radiation[current_state]}
         )
+
+        radiation_log.append(radiation[current_state])
 
         # Seleccionar el siguiente estado basado en las probabilidades
         next_state = random.choices(
@@ -59,11 +62,13 @@ def simulate_weather(days, initial_state="Soleado"):
     return weather_log
 
 
-# Simular el clima durante 30 días
-simulated_weather = simulate_weather(30)
-
-# Mostrar los resultados
+# # Simular el clima durante 30 días
+simulated_weather = simulate_weather(1)
 for day, weather in enumerate(simulated_weather, start=1):
-    print(
-        f"Día {day}: Estado: {weather['Estado']}, Radiación: {weather['Radiación']} W/m²"
-    )
+    print(weather['Radiación'])
+
+# # Mostrar los resultados
+# for day, weather in enumerate(simulated_weather, start=1):
+#     print(
+#         f"Día {day}: Estado: {weather['Estado']}, Radiación: {weather['Radiación']} W/m²"
+#     )
