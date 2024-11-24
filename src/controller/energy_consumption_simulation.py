@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 from ..models import Device, Property, RandomGenerator, SolarPanel, simulate_weather
 from ..views import Menu
 
@@ -8,6 +9,7 @@ class EnergyConsumptionSimulation:
         self.interface_menu = Menu()
         self.device_list = []
         self.consumption_list = []
+        self.solar_generation_list = []
 
     def save_device(self):
         return self.device_list
@@ -55,9 +57,15 @@ class EnergyConsumptionSimulation:
         active_area = self.generate_solar_panel().get_active_area
         efficiency = self.generate_solar_panel().get_efficiency
         simulate_weather_radiation = simulate_weather(30)
+
+        self.solar_generation_list = []  # Reiniciar la lista para una nueva simulación
+
         for day, weather in enumerate(simulate_weather_radiation, start=1):
             solar_radiation = weather["Radiación"]
-            voltage += active_area * solar_radiation * (efficiency / 100)
+            daily_voltage = active_area * solar_radiation * (efficiency / 100)
+            voltage += daily_voltage
+            self.solar_generation_list.append(daily_voltage)  # Guardar generación diaria
+
         average_voltage = voltage / 30
         return f"Voltaje promedio del panel al mes: {average_voltage}kWh"
 
@@ -120,20 +128,107 @@ class EnergyConsumptionSimulation:
 
     def show_consume(self):
         months = [
-            "Enero",
-            "Febrero",
-            "Marzo",
-            "Abril",
-            "Mayo",
-            "Junio",
-            "Julio",
-            "Agosto",  
-            "Septiembre",
-            "Octubre",
-            "Noviembre",
-            "Diciembre",
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
         ]
-        self.interface_menu.show_consumption_by_month(months, self.consumption_list)
+        
+
+        plt.ion()  # Activar modo interactivo
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 18))  # Crear tres subplots verticales
+
+        # Configuración inicial del subplot 1 (Consumo)
+        ax1.set_title("Consumo de energía mensual", fontsize=16)
+        ax1.set_xlabel("Meses", fontsize=14)
+        ax1.set_ylabel("Consumo (kWh)", fontsize=14)
+        ax1.grid(True, linestyle="--", alpha=0.6)
+        ax1.set_xticks(range(len(months)))
+        ax1.set_xticklabels(months, rotation=45, fontsize=12)
+        ax1.set_xlim(-1, len(months))
+
+        # Configuración inicial del subplot 2 (Generación solar)
+        ax2.set_title("Generación de energía solar mensual", fontsize=16)
+        ax2.set_xlabel("Meses", fontsize=14)
+        ax2.set_ylabel("Generación (kWh)", fontsize=14)
+        ax2.grid(True, linestyle="--", alpha=0.6)
+        ax2.set_xticks(range(len(months)))
+        ax2.set_xticklabels(months, rotation=45, fontsize=12)
+        ax2.set_xlim(-1, len(months))
+
+        for i in range(len(months)):
+            # Actualizar el subplot 1 con los datos de consumo
+            
+
+            ax1.clear()
+            ax1.plot(
+                months[: i + 1],
+                self.consumption_list[: i + 1],
+                marker="o",
+                color="b",
+                label="Consumo de energía (kWh)",
+            )
+            ax1.set_title("Consumo de energía mensual", fontsize=16)
+            ax1.set_xlabel("Meses", fontsize=14)
+            ax1.set_ylabel("Consumo (kWh)", fontsize=14)
+            ax1.grid(True, linestyle="--", alpha=0.6)
+            ax1.set_xticks(range(len(months)))
+            ax1.set_xticklabels(months, rotation=45, fontsize=12)
+            ax1.set_xlim(-1, len(months))
+            ax1.legend(fontsize=12)
+
+            # Actualizar el subplot 2 con los datos de generación solar
+            ax2.clear()
+            ax2.plot(
+                months[: i + 1],
+                self.solar_generation_list[: i + 1],
+                marker="o",
+                color="g",
+                label="Generación de energía solar (kWh)",
+            )
+            ax2.set_title("Generación de energía solar mensual", fontsize=16)
+            ax2.set_xlabel("Meses", fontsize=14)
+            ax2.set_ylabel("Generación (kWh)", fontsize=14)
+            ax2.grid(True, linestyle="--", alpha=0.6)
+            ax2.set_xticks(range(len(months)))
+            ax2.set_xticklabels(months, rotation=45, fontsize=12)
+            ax2.set_xlim(-1, len(months))
+            ax2.legend(fontsize=12)
+
+            
+            
+            # Configuración del subplot 3 (Energía satisfecha y no satisfecha mensual)
+            ax3.set_title("Energía satisfecha y no satisfecha mensual", fontsize=16)
+            ax3.set_xlabel("Meses", fontsize=14)
+            ax3.set_ylabel("Energía (kWh)", fontsize=14)
+            ax3.grid(True, linestyle="--", alpha=0.6)
+            ax3.set_xticks(range(len(months)))
+            ax3.set_xticklabels(months, rotation=45, fontsize=12)
+
+            # Recalcular energía cubierta y no cubierta en cada iteración
+            energy_covered, energy_uncovered = self.calculate_coverage()
+
+            # Barra apilada: energía satisfecha (verde) y energía no satisfecha (naranja)
+            ax3.bar(months, energy_covered, color="g")  # Parte satisfecha
+            ax3.bar(months, energy_uncovered, bottom=energy_covered, color="orange")  # Parte no satisfecha
+            
+            # Pausar para simular tiempo real
+            plt.pause(0.5)
+
+
+        plt.ioff()  # Desactivar modo interactivo
+        plt.show()  # Mostrar ambas gráficas en la misma ventana
+        
+        #self.interface_menu.show_consumption_by_month(months, self.consumption_list, self.solar_generation_list, energy_covered, energy_uncovered)
+
+    def calculate_coverage(self):
+        # Calcular los valores absolutos de energía cubierta y no cubierta
+        energy_covered = [
+            min(gen, cons) for gen, cons in zip(self.solar_generation_list, self.consumption_list)
+        ]
+        energy_uncovered = [
+            cons - cov for cons, cov in zip(self.consumption_list, energy_covered)
+        ]
+        return energy_covered, energy_uncovered
+
 
 
 energy_consumption = EnergyConsumptionSimulation()
