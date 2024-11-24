@@ -1,10 +1,13 @@
 from ..models import Device, Property, RandomGenerator, SolarPanel, simulate_weather
+from ..views import Menu
 
 
 class EnergyConsumptionSimulation:
     def __init__(self):
         self.random_generator = RandomGenerator()
+        self.interface_menu = Menu()
         self.device_list = []
+        self.consumption_list = []
 
     def save_device(self):
         return self.device_list
@@ -90,6 +93,7 @@ class EnergyConsumptionSimulation:
             print("mes: ", _)
             anual_consume_sum += light_consumption
             monthly_consume += self.build_property(self.generate_property())
+            self.consumption_list.append(monthly_consume)
             print(f"Consumo total del mes: {monthly_consume}")
             for value in self.save_device():
                 print(value.get_device_type, value.get_consumption)
@@ -113,6 +117,23 @@ class EnergyConsumptionSimulation:
                 )
         print(f"Consumo total del año: {anual_consume_sum}")
 
+    def show_consume(self):
+        months = [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre",
+        ]
+        self.interface_menu.show_consumption_by_month(months, self.consumption_list)
+
 
 energy_consumption = EnergyConsumptionSimulation()
 
@@ -128,3 +149,5 @@ print(
     energy_consumption.build_property(energy_consumption.generate_property()),
 )
 print(energy_consumption.calculate_voltage())
+
+energy_consumption.show_consume()

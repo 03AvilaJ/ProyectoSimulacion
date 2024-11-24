@@ -32,8 +32,8 @@ probabilities = {
 
 # Radiación por estado (en W/m²)
 radiation = {
-    "Soleado": 600,
-    "Nublado": 400,
+    "Soleado": 500,
+    "Nublado": 300,
     "Lluvia Ligera": 100,
     "Lluvia Fuerte": 0,
     "Tormenta": 0,
