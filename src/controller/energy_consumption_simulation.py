@@ -56,7 +56,7 @@ class EnergyConsumptionSimulation:
             solar_radiation = weather["Radiación"]
             voltage += active_area * solar_radiation * (efficiency / 100)
         average_voltage = voltage / 30
-        return f"Voltaje promedio del panel al mes: {average_voltage}"
+        return f"Voltaje promedio del panel al mes: {average_voltage}kWh"
 
     def add_solar_panel_to_property(self, property):
         property.set_solar_panel = self.generate_solar_panel()
@@ -89,7 +89,7 @@ class EnergyConsumptionSimulation:
         for _ in range(months):
             print("mes: ", _)
             anual_consume_sum += light_consumption
-            monthly_consume += light_consumption
+            monthly_consume += self.build_property(self.generate_property())
             print(f"Consumo total del mes: {monthly_consume}")
             for value in self.save_device():
                 print(value.get_device_type, value.get_consumption)
@@ -122,16 +122,9 @@ print(
         energy_consumption.build_property(energy_consumption.generate_property())
     )
 )
-# print(energy_consumption.save_device())
-# print(
-#     "Consumo de un mes: ",
-#     energy_consumption.calculate_monthly_consumption(
-#         energy_consumption.generate_property()
-#     ),
-# )
 
-# print(energy_consumption.generate_solar_panel())
-# energy_consumption.add_solar_panel_to_property(energy_consumption.generate_property())
-# print(energy_consumption.generate_property().get_solar_panel)
-print(energy_consumption.build_property(energy_consumption.generate_property()))
+print(
+    "Energia: ",
+    energy_consumption.build_property(energy_consumption.generate_property()),
+)
 print(energy_consumption.calculate_voltage())
