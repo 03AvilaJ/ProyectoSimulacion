@@ -117,6 +117,7 @@ class EnergyConsumptionSimulation:
                 )
         print(f"Consumo total del año: {anual_consume_sum}")
 
+
     def show_consume(self):
         months = [
             "Enero",
@@ -126,7 +127,7 @@ class EnergyConsumptionSimulation:
             "Mayo",
             "Junio",
             "Julio",
-            "Agosto",
+            "Agosto",  
             "Septiembre",
             "Octubre",
             "Noviembre",
