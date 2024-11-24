@@ -3,7 +3,7 @@ class SolarPanel:
         self,
         active_area,
         efficiency,
-        solar_radiaton,
+        solar_radiaton=0,
         voltage=0,
         inverter=None,
         battery=None,

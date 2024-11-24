@@ -41,22 +41,22 @@ class EnergyConsumptionSimulation:
         property.set_light_consumption = total_consume
         return total_consume
 
-    def get_radiation(self):
-        simulate_weather_radiation = simulate_weather(30)
-        for day, weather in enumerate(simulate_weather_radiation, start=1):
-
-            return weather["Radiación"]
-
     def generate_solar_panel(self, active_area=1.6):
         random_efficiency = self.random_generator.generate_in_range(15, 22)
-        radiation = self.get_radiation()
-        new_solar_panel = SolarPanel(active_area, random_efficiency, radiation)
+        new_solar_panel = SolarPanel(active_area, random_efficiency)
 
-        return (
-            new_solar_panel.get_active_area,
-            new_solar_panel.get_efficiency,
-            new_solar_panel.get_solar_radiaton,
-        )
+        return new_solar_panel
+
+    def calculate_voltage(self):
+        voltage = 0
+        active_area = self.generate_solar_panel().get_active_area
+        efficiency = self.generate_solar_panel().get_efficiency
+        simulate_weather_radiation = simulate_weather(30)
+        for day, weather in enumerate(simulate_weather_radiation, start=1):
+            solar_radiation = weather["Radiación"]
+            voltage += active_area * solar_radiation * (efficiency / 100)
+        average_voltage = voltage / 30
+        return f"Voltaje promedio del panel al mes: {average_voltage}"
 
     def add_solar_panel_to_property(self, property):
         property.set_solar_panel = self.generate_solar_panel()
@@ -134,3 +134,4 @@ print(
 # energy_consumption.add_solar_panel_to_property(energy_consumption.generate_property())
 # print(energy_consumption.generate_property().get_solar_panel)
 print(energy_consumption.build_property(energy_consumption.generate_property()))
+print(energy_consumption.calculate_voltage())
