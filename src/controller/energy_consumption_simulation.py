@@ -72,15 +72,56 @@ class EnergyConsumptionSimulation:
             property_under_construction.get_solar_panel,
         )
 
-        return completed_property
+        return completed_property.get_light_consumption
+
+    def temporal_build_device(self):
+        self.generate_device("nevera", 1)
+        self.generate_device("Lavadora", 2)
+        self.generate_device("Freidora de aire", 1)
+        self.generate_device("Televisor", 2)
+        self.generate_device("Computador", 3)
+
+    def simulate_daily_consumption(self, light_consumption):
+        months = 12
+        anual_consume_sum = 0
+        monthly_consume = 0
+
+        for _ in range(months):
+            print("mes: ", _)
+            anual_consume_sum += light_consumption
+            monthly_consume += light_consumption
+            print(f"Consumo total del mes: {monthly_consume}")
+            for value in self.save_device():
+                print(value.get_device_type, value.get_consumption)
+
+                value.set_consumption = 0
+                monthly_consume = 0
+                self.save_device()[0].set_consumption = (
+                    self.random_generator.generate_in_range(30, 50)
+                )
+                self.save_device()[1].set_consumption = (
+                    self.random_generator.generate_in_range(5, 10)
+                )
+                self.save_device()[2].set_consumption = (
+                    self.random_generator.generate_in_range(2, 5)
+                )
+                self.save_device()[3].set_consumption = (
+                    self.random_generator.generate_in_range(10, 20)
+                )
+                self.save_device()[4].set_consumption = (
+                    self.random_generator.generate_in_range(10, 30)
+                )
+        print(f"Consumo total del año: {anual_consume_sum}")
 
 
 energy_consumption = EnergyConsumptionSimulation()
-print(energy_consumption.generate_device("nevera", 1))
-print(energy_consumption.generate_device("Lavadora", 2))
-print(energy_consumption.generate_device("Freidora de aire", 1))
-print(energy_consumption.generate_device("Televisor", 2))
-print(energy_consumption.generate_device("Computador", 3))
+
+energy_consumption.temporal_build_device()
+print(
+    energy_consumption.simulate_daily_consumption(
+        energy_consumption.build_property(energy_consumption.generate_property())
+    )
+)
 # print(energy_consumption.save_device())
 # print(
 #     "Consumo de un mes: ",
