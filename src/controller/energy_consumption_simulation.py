@@ -8,6 +8,7 @@ class EnergyConsumptionSimulation:
         self.interface_menu = Menu()
         self.device_list = []
         self.consumption_list = []
+        self.consumption_whit_solar_panel_list = []
 
     def save_device(self):
         return self.device_list
@@ -59,10 +60,13 @@ class EnergyConsumptionSimulation:
             solar_radiation = weather["Radiación"]
             voltage += active_area * solar_radiation * (efficiency / 100)
         average_voltage = voltage / 30
-        return f"Voltaje promedio del panel al mes: {average_voltage}kWh"
+        print(f"Voltaje: {average_voltage}")
+        return average_voltage
 
     def add_solar_panel_to_property(self, property):
-        property.set_solar_panel = self.generate_solar_panel()
+        solar_panel = self.generate_solar_panel()
+        solar_panel.set_voltage = self.calculate_voltage()
+        property.set_solar_panel = solar_panel
 
     def build_property(self, property_under_construction):
         self.calculate_monthly_consumption(property_under_construction)
@@ -75,7 +79,7 @@ class EnergyConsumptionSimulation:
             property_under_construction.get_solar_panel,
         )
 
-        return completed_property.get_light_consumption
+        return completed_property
 
     def temporal_build_device(self):
         self.generate_device("nevera", 1)
@@ -84,17 +88,39 @@ class EnergyConsumptionSimulation:
         self.generate_device("Televisor", 2)
         self.generate_device("Computador", 3)
 
-    def simulate_daily_consumption(self, light_consumption):
+    def simulate_monthly_consumption(self, light_consumption):
         months = 12
         anual_consume_sum = 0
         monthly_consume = 0
+        monthly_consume_whit_solar_panel = 0
 
         for _ in range(months):
             print("mes: ", _)
-            anual_consume_sum += light_consumption
-            monthly_consume += self.build_property(self.generate_property())
+            anual_consume_sum += light_consumption.get_light_consumption
+            monthly_consume += self.build_property(
+                self.generate_property()
+            ).get_light_consumption
+
+            monthly_consume_whit_solar_panel = (
+                monthly_consume - light_consumption.get_solar_panel.get_voltage
+            )
+            print(
+                f"Consumo total del mes con panel: {monthly_consume_whit_solar_panel}"
+            )
             self.consumption_list.append(monthly_consume)
+            if monthly_consume_whit_solar_panel < 0:
+                monthly_consume_whit_solar_panel = 0
+                self.consumption_whit_solar_panel_list.append(
+                    monthly_consume_whit_solar_panel
+                )
+            else:
+                self.consumption_whit_solar_panel_list.append(
+                    monthly_consume_whit_solar_panel
+                )
             print(f"Consumo total del mes: {monthly_consume}")
+            print(
+                f"Consumo total del mes con panel: {monthly_consume_whit_solar_panel}"
+            )
             for value in self.save_device():
                 print(value.get_device_type, value.get_consumption)
 
@@ -117,7 +143,6 @@ class EnergyConsumptionSimulation:
                 )
         print(f"Consumo total del año: {anual_consume_sum}")
 
-
     def show_consume(self):
         months = [
             "Enero",
@@ -127,7 +152,7 @@ class EnergyConsumptionSimulation:
             "Mayo",
             "Junio",
             "Julio",
-            "Agosto",  
+            "Agosto",
             "Septiembre",
             "Octubre",
             "Noviembre",
@@ -135,20 +160,35 @@ class EnergyConsumptionSimulation:
         ]
         self.interface_menu.show_consumption_by_month(months, self.consumption_list)
 
+    def show_consume_whit_panel(self):
+        months = [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre",
+        ]
+        self.interface_menu.show_consumption_by_month_whit_panel(
+            months, self.consumption_list, self.consumption_whit_solar_panel_list
+        )
+
 
 energy_consumption = EnergyConsumptionSimulation()
 
 energy_consumption.temporal_build_device()
 print(
-    energy_consumption.simulate_daily_consumption(
+    energy_consumption.simulate_monthly_consumption(
         energy_consumption.build_property(energy_consumption.generate_property())
     )
 )
 
-print(
-    "Energia: ",
-    energy_consumption.build_property(energy_consumption.generate_property()),
-)
-print(energy_consumption.calculate_voltage())
 
-energy_consumption.show_consume()
+# energy_consumption.show_consume()
+energy_consumption.show_consume_whit_panel()
