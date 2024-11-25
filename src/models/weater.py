@@ -1,25 +1,12 @@
 import random
 
+import numpy as np
+
+from ..models import RandomGenerator
+import random
+
 # Definir la matriz de transición
-transition_matrix = {
-    "Soleado": ["Soleado", "Nublado", "Lluvia Ligera", "Lluvia Fuerte", "Tormenta"],
-    "Nublado": ["Soleado", "Nublado", "Lluvia Ligera", "Lluvia Fuerte", "Tormenta"],
-    "Lluvia Ligera": [
-        "Soleado",
-        "Nublado",
-        "Lluvia Ligera",
-        "Lluvia Fuerte",
-        "Tormenta",
-    ],
-    "Lluvia Fuerte": [
-        "Soleado",
-        "Nublado",
-        "Lluvia Ligera",
-        "Lluvia Fuerte",
-        "Tormenta",
-    ],
-    "Tormenta": ["Soleado", "Nublado", "Lluvia Ligera", "Lluvia Fuerte", "Tormenta"],
-}
+states = ["Soleado", "Nublado", "Lluvia Ligera", "Lluvia Fuerte", "Tormenta"]
 
 # Probabilidades de transición (simplificadas)
 probabilities = {
@@ -42,22 +29,35 @@ radiation = {
 
 # Función para simular el clima para N días
 def simulate_weather(days, initial_state="Soleado"):
+    semillas = [77,13,55,20,90,4434]
+    randomP = RandomGenerator( 832262, 1013904223, 32, 500)
+    Xi, num_aleatorio_arr = randomP.congruencial_lineal(random.choice(semillas))
+    current_index = 0
     current_state = initial_state
     weather_log = []
     radiation_log = []
 
     for _ in range(days):
-        weather_log.append(
-            {"Estado": current_state, "Radiación": radiation[current_state]}
-        )
-
+        weather_log.append({"Estado": current_state, "Radiación": radiation[current_state]})
         radiation_log.append(radiation[current_state])
 
-        # Seleccionar el siguiente estado basado en las probabilidades
-        next_state = random.choices(
-            transition_matrix[current_state], probabilities[current_state]
-        )[0]
-        current_state = next_state
+        # Obtener las probabilidades de transición para el estado actual
+        transition_probs = probabilities[current_state]
+        
+        # Calcular la distribución acumulada usando np.cumsum
+        cumulative_probs = np.cumsum(transition_probs)
+
+        # Obtener el siguiente número aleatorio y avanzar el índice
+        rand_value = num_aleatorio_arr[current_index]  # Usar el número en la posición actual
+        current_index += 1  # Avanzar al siguiente número aleatorio
+
+        # Determinar el siguiente estado basándonos en la distribución acumulada
+        for i, cumulative_prob in enumerate(cumulative_probs):
+            if rand_value < cumulative_prob:
+                next_state = states[i]
+                break
+        
+        current_state = next_state  # Actualizamos el estado actual
 
     return weather_log
 
