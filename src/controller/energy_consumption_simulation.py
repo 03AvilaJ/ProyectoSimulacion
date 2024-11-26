@@ -6,7 +6,7 @@ import random
 
 class EnergyConsumptionSimulation:
     def __init__(self):
-        self.semillas = [77,13,55,20,90,4434]
+        self.semillas = [77, 13, 55, 20, 90, 4434]
         self.random_generator = RandomGenerator(832262, 1013904223, 32, 500)
         self.interface_menu = Menu()
         self.device_list = []
@@ -17,32 +17,52 @@ class EnergyConsumptionSimulation:
         return self.device_list
 
     def generate_device(self, device_name, amount):
-        
-        Xi, num_aleatorio_nevera = self.random_generator.congruencial_lineal(random.choice(self.semillas))
-        Xi, num_aleatorio_lavadora = self.random_generator.congruencial_lineal(random.choice(self.semillas))
-        Xi, num_aleatorio_freidora = self.random_generator.congruencial_lineal(random.choice(self.semillas))
-        Xi, num_aleatorio_televisor = self.random_generator.congruencial_lineal(random.choice(self.semillas))
-        Xi, num_aleatorio_computador = self.random_generator.congruencial_lineal(random.choice(self.semillas))
+
+        Xi, num_aleatorio_nevera = self.random_generator.congruencial_lineal(
+            random.choice(self.semillas)
+        )
+        Xi, num_aleatorio_lavadora = self.random_generator.congruencial_lineal(
+            random.choice(self.semillas)
+        )
+        Xi, num_aleatorio_freidora = self.random_generator.congruencial_lineal(
+            random.choice(self.semillas)
+        )
+        Xi, num_aleatorio_televisor = self.random_generator.congruencial_lineal(
+            random.choice(self.semillas)
+        )
+        Xi, num_aleatorio_computador = self.random_generator.congruencial_lineal(
+            random.choice(self.semillas)
+        )
         lower_name = device_name.lower()
         new_device = ""
         if lower_name == "nevera":
-            random_consume_nevera = self.random_generator.numero_dis_unirfome(num_aleatorio_nevera,30, 50)
+            random_consume_nevera = self.random_generator.numero_dis_unirfome(
+                num_aleatorio_nevera, 90, 120
+            )
             random_consume = random_consume_nevera[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 24)
         elif lower_name == "lavadora":
-            random_consume_lavadora = self.random_generator.numero_dis_unirfome(num_aleatorio_lavadora,5, 10)
+            random_consume_lavadora = self.random_generator.numero_dis_unirfome(
+                num_aleatorio_lavadora, 15, 30
+            )
             random_consume = random_consume_lavadora[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 3)
         elif lower_name == "freidora de aire":
-            random_consume_freidora = self.random_generator.numero_dis_unirfome(num_aleatorio_freidora,2, 5)
+            random_consume_freidora = self.random_generator.numero_dis_unirfome(
+                num_aleatorio_freidora, 10, 15
+            )
             random_consume = random_consume_freidora[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 1)
         elif lower_name == "televisor":
-            random_consume_tv = self.random_generator.numero_dis_unirfome(num_aleatorio_televisor,10, 20)
+            random_consume_tv = self.random_generator.numero_dis_unirfome(
+                num_aleatorio_televisor, 40, 60
+            )
             random_consume = random_consume_tv[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 3)
         elif lower_name == "computador":
-            random_consume_pc = self.random_generator.numero_dis_unirfome(num_aleatorio_computador,10, 30)
+            random_consume_pc = self.random_generator.numero_dis_unirfome(
+                num_aleatorio_computador, 40, 60
+            )
             random_consume = random_consume_pc[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 8)
         self.device_list.append(new_device)
@@ -60,8 +80,12 @@ class EnergyConsumptionSimulation:
         return total_consume
 
     def generate_solar_panel(self, active_area=1.6):
-        Xi, num_aleatorio_efficiency = self.random_generator.congruencial_lineal(random.choice(self.semillas))
-        random_consume_efficiency = self.random_generator.numero_dis_unirfome(num_aleatorio_efficiency,15, 22)
+        Xi, num_aleatorio_efficiency = self.random_generator.congruencial_lineal(
+            random.choice(self.semillas)
+        )
+        random_consume_efficiency = self.random_generator.numero_dis_unirfome(
+            num_aleatorio_efficiency, 15, 22
+        )
         random_efficiency = random_consume_efficiency[random.randint(0, 499)]
         new_solar_panel = SolarPanel(active_area, random_efficiency)
 
@@ -80,7 +104,9 @@ class EnergyConsumptionSimulation:
             daily_voltage = active_area * solar_radiation * (efficiency / 100)
             voltage += daily_voltage
             average_voltage = voltage / 30
-            self.solar_generation_list.append(average_voltage)  # Guardar generación diaria
+            self.solar_generation_list.append(
+                average_voltage
+            )  # Guardar generación diaria
 
         return f"Voltaje promedio del panel al mes: {average_voltage}kWh"
 
@@ -111,7 +137,9 @@ class EnergyConsumptionSimulation:
         months = 12
         anual_consume_sum = 0
         monthly_consume = 0
-        Xi, num_aleatorio = self.random_generator.congruencial_lineal(random.choice(self.semillas))
+        Xi, num_aleatorio = self.random_generator.congruencial_lineal(
+            random.choice(self.semillas)
+        )
 
         for _ in range(months):
             print("mes: ", _)
@@ -124,38 +152,56 @@ class EnergyConsumptionSimulation:
 
                 value.set_consumption = 0
                 monthly_consume = 0
-                random_consumption1 = self.random_generator.numero_dis_unirfome(num_aleatorio,30, 50)               
-                self.save_device()[0].set_ = (                   
-                    random_consumption1[random.randint(0, 499)]
+                random_consumption1 = self.random_generator.numero_dis_unirfome(
+                    num_aleatorio, 90, 120
                 )
-                random_consumption2 = self.random_generator.numero_dis_unirfome(num_aleatorio,5, 10)    
-                self.save_device()[1].set_consumption = (
-                    random_consumption2[random.randint(0, 499)]
+                self.save_device()[0].set_ = random_consumption1[random.randint(0, 499)]
+                random_consumption2 = self.random_generator.numero_dis_unirfome(
+                    num_aleatorio, 15, 30
                 )
-                random_consumption3 = self.random_generator.numero_dis_unirfome(num_aleatorio,2, 5)    
-                self.save_device()[2].set_consumption = (
-                    random_consumption3[random.randint(0, 499)]
+                self.save_device()[1].set_consumption = random_consumption2[
+                    random.randint(0, 499)
+                ]
+                random_consumption3 = self.random_generator.numero_dis_unirfome(
+                    num_aleatorio, 10, 15
                 )
-                random_consumption4 = self.random_generator.numero_dis_unirfome(num_aleatorio,10, 20)   
-                self.save_device()[3].set_consumption = (
-                    random_consumption4[random.randint(0, 499)]
+                self.save_device()[2].set_consumption = random_consumption3[
+                    random.randint(0, 499)
+                ]
+                random_consumption4 = self.random_generator.numero_dis_unirfome(
+                    num_aleatorio, 40, 60
                 )
-                random_consumption5 = self.random_generator.numero_dis_unirfome(num_aleatorio,10, 30)   
-                self.save_device()[4].set_consumption = (
-                    random_consumption5[random.randint(0, 499)]
+                self.save_device()[3].set_consumption = random_consumption4[
+                    random.randint(0, 499)
+                ]
+                random_consumption5 = self.random_generator.numero_dis_unirfome(
+                    num_aleatorio, 40, 60
                 )
+                self.save_device()[4].set_consumption = random_consumption5[
+                    random.randint(0, 499)
+                ]
         print(f"Consumo total del año: {anual_consume_sum}")
-
 
     def show_consume(self):
         months = [
-            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre",
         ]
-        
 
         plt.ion()  # Activar modo interactivo
-        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 18))  # Crear tres subplots verticales
+        fig, (ax1, ax2, ax3) = plt.subplots(
+            3, 1, figsize=(12, 18)
+        )  # Crear tres subplots verticales
 
         # Configuración inicial del subplot 1 (Consumo)
         ax1.set_title("Consumo de energía mensual", fontsize=16)
@@ -177,7 +223,6 @@ class EnergyConsumptionSimulation:
 
         for i in range(len(months)):
             # Actualizar el subplot 1 con los datos de consumo
-            
 
             ax1.clear()
             ax1.plot(
@@ -214,8 +259,6 @@ class EnergyConsumptionSimulation:
             ax2.set_xlim(-1, len(months))
             ax2.legend(fontsize=12)
 
-            
-            
             # Configuración del subplot 3 (Energía satisfecha y no satisfecha mensual)
             ax3.set_title("Energía satisfecha y no satisfecha mensual", fontsize=16)
             ax3.set_xlabel("Meses", fontsize=14)
@@ -229,27 +272,28 @@ class EnergyConsumptionSimulation:
 
             # Barra apilada: energía satisfecha (verde) y energía no satisfecha (naranja)
             ax3.bar(months, energy_covered, color="g")  # Parte satisfecha
-            ax3.bar(months, energy_uncovered, bottom=energy_covered, color="orange")  # Parte no satisfecha
-            
+            ax3.bar(
+                months, energy_uncovered, bottom=energy_covered, color="orange"
+            )  # Parte no satisfecha
+
             # Pausar para simular tiempo real
             plt.pause(0.5)
 
-
         plt.ioff()  # Desactivar modo interactivo
         plt.show()  # Mostrar ambas gráficas en la misma ventana
-        
-        #self.interface_menu.show_consumption_by_month(months, self.consumption_list, self.solar_generation_list, energy_covered, energy_uncovered)
+
+        # self.interface_menu.show_consumption_by_month(months, self.consumption_list, self.solar_generation_list, energy_covered, energy_uncovered)
 
     def calculate_coverage(self):
         # Calcular los valores absolutos de energía cubierta y no cubierta
         energy_covered = [
-            min(gen, cons) for gen, cons in zip(self.solar_generation_list, self.consumption_list)
+            min(gen, cons)
+            for gen, cons in zip(self.solar_generation_list, self.consumption_list)
         ]
         energy_uncovered = [
             cons - cov for cons, cov in zip(self.consumption_list, energy_covered)
         ]
         return energy_covered, energy_uncovered
-
 
 
 energy_consumption = EnergyConsumptionSimulation()
