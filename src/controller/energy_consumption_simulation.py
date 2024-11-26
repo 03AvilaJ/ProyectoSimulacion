@@ -155,7 +155,9 @@ class EnergyConsumptionSimulation:
                 random_consumption1 = self.random_generator.numero_dis_unirfome(
                     num_aleatorio, 90, 120
                 )
-                self.save_device()[0].set_ = random_consumption1[random.randint(0, 499)]
+                self.save_device()[0].set_consumption = random_consumption1[
+                    random.randint(0, 499)
+                ]
                 random_consumption2 = self.random_generator.numero_dis_unirfome(
                     num_aleatorio, 15, 30
                 )
