@@ -124,7 +124,7 @@ class EnergyConsumptionSimulation:
             property_under_construction.get_solar_panel,
         )
 
-        return completed_property.get_light_consumption
+        return completed_property
 
     def temporal_build_device(self):
         self.generate_device("nevera", 1)
@@ -134,55 +134,70 @@ class EnergyConsumptionSimulation:
         self.generate_device("Computador", 3)
 
     def simulate_daily_consumption(self, light_consumption):
+        continue_simulation = True
         months = 12
         anual_consume_sum = 0
         monthly_consume = 0
+        years_elapsed = 0
+        solar_panel_wear_and_tear = 3
+        solar_panel_years = self.build_property(
+            self.generate_property()
+        ).get_solar_panel.get_shelf_life
         Xi, num_aleatorio = self.random_generator.congruencial_lineal(
             random.choice(self.semillas)
         )
 
-        for _ in range(months):
-            print("mes: ", _)
-            anual_consume_sum += light_consumption
-            monthly_consume += self.build_property(self.generate_property())
-            self.consumption_list.append(monthly_consume)
-            print(f"Consumo total del mes: {monthly_consume}")
-            for value in self.save_device():
-                print(value.get_device_type, value.get_consumption)
+        while continue_simulation and years_elapsed < solar_panel_years:
+            print(continue_simulation)
+            for _ in range(months):
+                print("mes: ", _, " año: ", years_elapsed)
+                anual_consume_sum += light_consumption.get_light_consumption
+                monthly_consume += self.build_property(
+                    self.generate_property()
+                ).get_light_consumption
+                self.consumption_list.append(monthly_consume)
+                print(f"Consumo total del mes: {monthly_consume}")
+                for value in self.save_device():
+                    print(value.get_device_type, value.get_consumption)
 
-                value.set_consumption = 0
-                monthly_consume = 0
-                random_consumption1 = self.random_generator.numero_dis_unirfome(
-                    num_aleatorio, 90, 120
-                )
-                self.save_device()[0].set_consumption = random_consumption1[
-                    random.randint(0, 499)
-                ]
-                random_consumption2 = self.random_generator.numero_dis_unirfome(
-                    num_aleatorio, 15, 30
-                )
-                self.save_device()[1].set_consumption = random_consumption2[
-                    random.randint(0, 499)
-                ]
-                random_consumption3 = self.random_generator.numero_dis_unirfome(
-                    num_aleatorio, 10, 15
-                )
-                self.save_device()[2].set_consumption = random_consumption3[
-                    random.randint(0, 499)
-                ]
-                random_consumption4 = self.random_generator.numero_dis_unirfome(
-                    num_aleatorio, 40, 60
-                )
-                self.save_device()[3].set_consumption = random_consumption4[
-                    random.randint(0, 499)
-                ]
-                random_consumption5 = self.random_generator.numero_dis_unirfome(
-                    num_aleatorio, 40, 60
-                )
-                self.save_device()[4].set_consumption = random_consumption5[
-                    random.randint(0, 499)
-                ]
-        print(f"Consumo total del año: {anual_consume_sum}")
+                    value.set_consumption = 0
+                    monthly_consume = 0
+                    random_consumption1 = self.random_generator.numero_dis_unirfome(
+                        num_aleatorio, 90, 120
+                    )
+                    self.save_device()[0].set_consumption = random_consumption1[
+                        random.randint(0, 499)
+                    ]
+                    random_consumption2 = self.random_generator.numero_dis_unirfome(
+                        num_aleatorio, 15, 30
+                    )
+                    self.save_device()[1].set_consumption = random_consumption2[
+                        random.randint(0, 499)
+                    ]
+                    random_consumption3 = self.random_generator.numero_dis_unirfome(
+                        num_aleatorio, 10, 15
+                    )
+                    self.save_device()[2].set_consumption = random_consumption3[
+                        random.randint(0, 499)
+                    ]
+                    random_consumption4 = self.random_generator.numero_dis_unirfome(
+                        num_aleatorio, 40, 60
+                    )
+                    self.save_device()[3].set_consumption = random_consumption4[
+                        random.randint(0, 499)
+                    ]
+                    random_consumption5 = self.random_generator.numero_dis_unirfome(
+                        num_aleatorio, 40, 60
+                    )
+                    self.save_device()[4].set_consumption = random_consumption5[
+                        random.randint(0, 499)
+                    ]
+            years_elapsed += 1
+            continue_simulation = input()
+            if continue_simulation == "False":
+                self.show_consume()
+            print(f"Consumo total del año: {anual_consume_sum}")
+            anual_consume_sum = 0
 
     def show_consume(self):
         months = [
@@ -309,7 +324,9 @@ print(
 
 print(
     "Energia: ",
-    energy_consumption.build_property(energy_consumption.generate_property()),
+    energy_consumption.build_property(
+        energy_consumption.generate_property()
+    ).get_light_consumption,
 )
 print(energy_consumption.calculate_voltage())
 
