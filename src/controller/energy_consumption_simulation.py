@@ -79,9 +79,9 @@ class EnergyConsumptionSimulation:
             solar_radiation = weather["Radiación"]
             daily_voltage = active_area * solar_radiation * (efficiency / 100)
             voltage += daily_voltage
-            self.solar_generation_list.append(daily_voltage)  # Guardar generación diaria
+            average_voltage = voltage / 30
+            self.solar_generation_list.append(average_voltage)  # Guardar generación diaria
 
-        average_voltage = voltage / 30
         return f"Voltaje promedio del panel al mes: {average_voltage}kWh"
 
     def add_solar_panel_to_property(self, property):

@@ -5,6 +5,8 @@ class SolarPanel:
         efficiency,
         solar_radiaton=0,
         voltage=0,
+        shelf_life=25,
+        profit_percentage=98.5,
         inverter=None,
         battery=None,
     ):
@@ -12,6 +14,8 @@ class SolarPanel:
         self._efficiency = efficiency
         self._solar_radiaton = solar_radiaton
         self._voltage = voltage
+        self._shelf_life = shelf_life
+        self._profit_percentage = profit_percentage
         self._inverter = inverter
         self._battery = battery
 
@@ -46,6 +50,22 @@ class SolarPanel:
     @get_voltage.setter
     def set_voltage(self, new_voltage):
         self._voltage = new_voltage
+
+    @property
+    def get_shelf_life(self):
+        return self._shelf_life
+
+    @get_shelf_life.setter
+    def set_shelf_life(self, new_shelf_life):
+        self._shelf_life = new_shelf_life
+
+    @property
+    def get_profit_percentage(self):
+        return self._profit_percentage
+
+    @get_profit_percentage.setter
+    def set_profit_percentage(self, new_profit_percentage):
+        self._profit_percentage = new_profit_percentage
 
     @property
     def get_inverter(self):
