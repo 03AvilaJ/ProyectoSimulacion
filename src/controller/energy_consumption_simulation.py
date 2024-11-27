@@ -97,8 +97,6 @@ class EnergyConsumptionSimulation:
         efficiency = self.generate_solar_panel().get_efficiency
         simulate_weather_radiation = simulate_weather(30)
 
-        # self.solar_generation_list = []  # Reiniciar la lista para una nueva simulación
-
         for day, weather in enumerate(simulate_weather_radiation, start=1):
             solar_radiation = weather["Radiación"]
             daily_voltage = active_area * solar_radiation * (efficiency / 100)
@@ -107,8 +105,9 @@ class EnergyConsumptionSimulation:
         return average_voltage
 
     def add_solar_panel_to_property(self, property):
-        self.generate_solar_panel().set_voltage = self.calculate_voltage()
-        property.set_solar_panel = self.generate_solar_panel()
+        solar_panel_completed = self.generate_solar_panel()
+        solar_panel_completed.set_voltage = self.calculate_voltage()
+        property.set_solar_panel = solar_panel_completed
 
     def build_property(self, property_under_construction):
         self.calculate_monthly_consumption(property_under_construction)
@@ -137,9 +136,7 @@ class EnergyConsumptionSimulation:
         monthly_consume = 0
         years_elapsed = 0
         solar_panel_wear_and_tear = 3
-        solar_panel_years = self.build_property(
-            self.generate_property()
-        ).get_solar_panel.get_shelf_life
+        solar_panel_years = light_consumption.get_solar_panel.get_shelf_life
         Xi, num_aleatorio = self.random_generator.congruencial_lineal(
             random.choice(self.semillas)
         )
@@ -152,12 +149,9 @@ class EnergyConsumptionSimulation:
                 monthly_consume += self.build_property(
                     self.generate_property()
                 ).get_light_consumption
+                solar_panel_generation = self.calculate_voltage()
                 self.consumption_list.append(monthly_consume)
-                self.solar_generation_list.append(
-                    self.build_property(
-                        self.generate_property().get_solar_panel.get_voltage
-                    )
-                )
+                self.solar_generation_list.append(solar_panel_generation)
                 print(f"Consumo total del mes: {monthly_consume}")
                 for value in self.save_device():
                     print(value.get_device_type, value.get_consumption)
@@ -198,11 +192,12 @@ class EnergyConsumptionSimulation:
             continue_simulation = input()
             if continue_simulation == "False":
                 print(f"Longitud lista consumo: {self.consumption_list}")
-                self.show_consume(self.consumption_list)
+                print(f"Longitud lista panel: {self.solar_generation_list}")
+                self.show_consume(self.consumption_list, self.solar_generation_list)
             print(f"Consumo total del año: {anual_consume_sum}")
             anual_consume_sum = 0
 
-    def show_consume(self, list_consumption):
+    def show_consume(self, list_consumption, list_solar_panel):
         months = [
             "Enero",
             "Febrero",
@@ -267,7 +262,7 @@ class EnergyConsumptionSimulation:
             ax2.clear()
             ax2.plot(
                 months[: i + 1],
-                list_consumption[: i + 1],
+                list_solar_panel[: i + 1],
                 marker="o",
                 color="g",
                 label="Generación de energía solar (kWh)",
@@ -321,7 +316,6 @@ class EnergyConsumptionSimulation:
 
 energy_consumption = EnergyConsumptionSimulation()
 
-print(energy_consumption.calculate_voltage())
 energy_consumption.temporal_build_device()
 print(
     energy_consumption.simulate_daily_consumption(
@@ -335,6 +329,6 @@ print(
         energy_consumption.generate_property()
     ).get_light_consumption,
 )
-print(energy_consumption.calculate_voltage())
+# print(energy_consumption.calculate_voltage())
 
 # energy_consumption.show_consume()
