@@ -191,13 +191,12 @@ class EnergyConsumptionSimulation:
             years_elapsed += 1
             continue_simulation = input()
             if continue_simulation == "False":
-                print(f"Longitud lista consumo: {self.consumption_list}")
-                print(f"Longitud lista panel: {self.solar_generation_list}")
-                self.show_consume(self.consumption_list, self.solar_generation_list)
+                self.show_consume(self.consumption_list, self.solar_generation_list, years_elapsed)
             print(f"Consumo total del año: {anual_consume_sum}")
             anual_consume_sum = 0
+            self.solar_generation_list = []
 
-    def show_consume(self, list_consumption, list_solar_panel):
+    def show_consume(self, list_consumption, list_solar_panel, year):
         months = [
             "Enero",
             "Febrero",
@@ -212,8 +211,6 @@ class EnergyConsumptionSimulation:
             "Noviembre",
             "Diciembre",
         ]
-        print(f"Longitud lista dentro del show: {len(list_consumption)}")
-        print(f"Longitud lista meses dentro del show: {len(months)}")
 
         plt.ion()  # Activar modo interactivo
         fig, (ax1, ax2, ax3) = plt.subplots(
@@ -221,7 +218,7 @@ class EnergyConsumptionSimulation:
         )  # Crear tres subplots verticales
 
         # Configuración inicial del subplot 1 (Consumo)
-        ax1.set_title("Consumo de energía mensual", fontsize=16)
+        ax1.set_title(f"Consumo de energía mensual. Año :{year}", fontsize=16)
         ax1.set_xlabel("Meses", fontsize=14)
         ax1.set_ylabel("Consumo (kWh)", fontsize=14)
         ax1.grid(True, linestyle="--", alpha=0.6)
@@ -249,7 +246,7 @@ class EnergyConsumptionSimulation:
                 color="b",
                 label="Consumo de energía (kWh)",
             )
-            ax1.set_title("Consumo de energía mensual", fontsize=16)
+            ax1.set_title(f"Consumo de energía mensual. Año: {year}", fontsize=16)
             ax1.set_xlabel("Meses", fontsize=14)
             ax1.set_ylabel("Consumo (kWh)", fontsize=14)
             ax1.grid(True, linestyle="--", alpha=0.6)
@@ -303,7 +300,7 @@ class EnergyConsumptionSimulation:
 
     def calculate_coverage(self):
         # Calcular los valores absolutos de energía cubierta y no cubierta
-        print(f"Lista dentro de covertura: {self.solar_generation_list}")
+        print(f"Lista energia solar dentro de cobertura: {self.solar_generation_list}")
         energy_covered = [
             min(gen, cons)
             for gen, cons in zip(self.solar_generation_list, self.consumption_list)
