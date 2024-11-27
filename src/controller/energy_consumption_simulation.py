@@ -97,20 +97,17 @@ class EnergyConsumptionSimulation:
         efficiency = self.generate_solar_panel().get_efficiency
         simulate_weather_radiation = simulate_weather(30)
 
-        self.solar_generation_list = []  # Reiniciar la lista para una nueva simulación
+        # self.solar_generation_list = []  # Reiniciar la lista para una nueva simulación
 
         for day, weather in enumerate(simulate_weather_radiation, start=1):
             solar_radiation = weather["Radiación"]
             daily_voltage = active_area * solar_radiation * (efficiency / 100)
             voltage += daily_voltage
             average_voltage = voltage / 30
-            self.solar_generation_list.append(
-                average_voltage
-            )  # Guardar generación diaria
-
-        return f"Voltaje promedio del panel al mes: {average_voltage}kWh"
+        return average_voltage
 
     def add_solar_panel_to_property(self, property):
+        self.generate_solar_panel().set_voltage = self.calculate_voltage()
         property.set_solar_panel = self.generate_solar_panel()
 
     def build_property(self, property_under_construction):
@@ -156,6 +153,11 @@ class EnergyConsumptionSimulation:
                     self.generate_property()
                 ).get_light_consumption
                 self.consumption_list.append(monthly_consume)
+                self.solar_generation_list.append(
+                    self.build_property(
+                        self.generate_property().get_solar_panel.get_voltage
+                    )
+                )
                 print(f"Consumo total del mes: {monthly_consume}")
                 for value in self.save_device():
                     print(value.get_device_type, value.get_consumption)
@@ -195,11 +197,12 @@ class EnergyConsumptionSimulation:
             years_elapsed += 1
             continue_simulation = input()
             if continue_simulation == "False":
-                self.show_consume()
+                print(f"Longitud lista consumo: {self.consumption_list}")
+                self.show_consume(self.consumption_list)
             print(f"Consumo total del año: {anual_consume_sum}")
             anual_consume_sum = 0
 
-    def show_consume(self):
+    def show_consume(self, list_consumption):
         months = [
             "Enero",
             "Febrero",
@@ -214,6 +217,8 @@ class EnergyConsumptionSimulation:
             "Noviembre",
             "Diciembre",
         ]
+        print(f"Longitud lista dentro del show: {len(list_consumption)}")
+        print(f"Longitud lista meses dentro del show: {len(months)}")
 
         plt.ion()  # Activar modo interactivo
         fig, (ax1, ax2, ax3) = plt.subplots(
@@ -244,7 +249,7 @@ class EnergyConsumptionSimulation:
             ax1.clear()
             ax1.plot(
                 months[: i + 1],
-                self.consumption_list[: i + 1],
+                list_consumption[: i + 1],
                 marker="o",
                 color="b",
                 label="Consumo de energía (kWh)",
@@ -262,7 +267,7 @@ class EnergyConsumptionSimulation:
             ax2.clear()
             ax2.plot(
                 months[: i + 1],
-                self.solar_generation_list[: i + 1],
+                list_consumption[: i + 1],
                 marker="o",
                 color="g",
                 label="Generación de energía solar (kWh)",
@@ -303,6 +308,7 @@ class EnergyConsumptionSimulation:
 
     def calculate_coverage(self):
         # Calcular los valores absolutos de energía cubierta y no cubierta
+        print(f"Lista dentro de covertura: {self.solar_generation_list}")
         energy_covered = [
             min(gen, cons)
             for gen, cons in zip(self.solar_generation_list, self.consumption_list)
@@ -315,6 +321,7 @@ class EnergyConsumptionSimulation:
 
 energy_consumption = EnergyConsumptionSimulation()
 
+print(energy_consumption.calculate_voltage())
 energy_consumption.temporal_build_device()
 print(
     energy_consumption.simulate_daily_consumption(
@@ -330,4 +337,4 @@ print(
 )
 print(energy_consumption.calculate_voltage())
 
-energy_consumption.show_consume()
+# energy_consumption.show_consume()
