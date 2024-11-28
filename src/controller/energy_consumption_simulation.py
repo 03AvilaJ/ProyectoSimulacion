@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+from matplotlib.widgets import Button
 from ..models import Device, Property, RandomGenerator, SolarPanel, simulate_weather
 from ..views import Menu
 import random
@@ -39,31 +40,31 @@ class EnergyConsumptionSimulation:
         new_device = ""
         if lower_name == "nevera":
             random_consume_nevera = self.random_generator.numero_dis_unirfome(
-                num_aleatorio_nevera, 90, 120
+                num_aleatorio_nevera, 30, 50
             )
             random_consume = random_consume_nevera[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 24)
         elif lower_name == "lavadora":
             random_consume_lavadora = self.random_generator.numero_dis_unirfome(
-                num_aleatorio_lavadora, 15, 30
+                num_aleatorio_lavadora, 10, 25
             )
             random_consume = random_consume_lavadora[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 3)
         elif lower_name == "freidora de aire":
             random_consume_freidora = self.random_generator.numero_dis_unirfome(
-                num_aleatorio_freidora, 10, 15
+                num_aleatorio_freidora, 5, 15
             )
             random_consume = random_consume_freidora[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 1)
         elif lower_name == "televisor":
             random_consume_tv = self.random_generator.numero_dis_unirfome(
-                num_aleatorio_televisor, 40, 60
+                num_aleatorio_televisor, 10, 20
             )
             random_consume = random_consume_tv[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 3)
         elif lower_name == "computador":
             random_consume_pc = self.random_generator.numero_dis_unirfome(
-                num_aleatorio_computador, 40, 60
+                num_aleatorio_computador, 5, 20
             )
             random_consume = random_consume_pc[random.randint(0, 499)]
             new_device = Device(device_name, random_consume, amount, 8)
@@ -164,31 +165,31 @@ class EnergyConsumptionSimulation:
                     value.set_consumption = 0
                     monthly_consume = 0
                     random_consumption1 = self.random_generator.numero_dis_unirfome(
-                        num_aleatorio, 90, 120
+                        num_aleatorio, 30, 50
                     )
                     self.save_device()[0].set_consumption = random_consumption1[
                         random.randint(0, 499)
                     ]
                     random_consumption2 = self.random_generator.numero_dis_unirfome(
-                        num_aleatorio, 15, 30
+                        num_aleatorio, 20, 35
                     )
                     self.save_device()[1].set_consumption = random_consumption2[
                         random.randint(0, 499)
                     ]
                     random_consumption3 = self.random_generator.numero_dis_unirfome(
-                        num_aleatorio, 10, 15
+                        num_aleatorio, 5, 15
                     )
                     self.save_device()[2].set_consumption = random_consumption3[
                         random.randint(0, 499)
                     ]
                     random_consumption4 = self.random_generator.numero_dis_unirfome(
-                        num_aleatorio, 40, 60
+                        num_aleatorio, 15, 30
                     )
                     self.save_device()[3].set_consumption = random_consumption4[
                         random.randint(0, 499)
                     ]
                     random_consumption5 = self.random_generator.numero_dis_unirfome(
-                        num_aleatorio, 40, 60
+                        num_aleatorio, 5, 20
                     )
                     self.save_device()[4].set_consumption = random_consumption5[
                         random.randint(0, 499)
@@ -196,7 +197,6 @@ class EnergyConsumptionSimulation:
             years_elapsed += 1
             self.consumption_list_yearly.append(anual_consume_sum)
             self.solar_generation_list_yearly.append(solar_panel_consume_yearly)
-            #continue_simulation = input()
             self.show_consume(
                 self.consumption_list, self.solar_generation_list, years_elapsed
             )
@@ -307,6 +307,7 @@ class EnergyConsumptionSimulation:
             )  # Parte no satisfecha
 
             # Pausar para simular tiempo real
+            fig.subplots_adjust(hspace=0.9, wspace=0.3)
             plt.pause(0.5)
 
         plt.ioff()  # Desactivar modo interactivo
@@ -434,6 +435,7 @@ class EnergyConsumptionSimulation:
             )  # Parte no satisfecha
 
             # Pausar para simular tiempo real
+            fig.subplots_adjust(hspace=0.9, wspace=0.3)
             plt.pause(0.5)
 
         plt.ioff()  # Desactivar modo interactivo
