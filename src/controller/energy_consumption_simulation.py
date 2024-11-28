@@ -361,7 +361,7 @@ class EnergyConsumptionSimulation:
         )  # Crear tres subplots verticales
 
         # Configuración inicial del subplot 1 (Consumo)
-        ax1.set_title(f"Consumo de energía mensual. Año :{year}", fontsize=16)
+        ax1.set_title(f"Consumo de energía anual. Año :{year}", fontsize=16)
         ax1.set_xlabel("Meses", fontsize=14)
         ax1.set_ylabel("Consumo (kWh)", fontsize=14)
         ax1.grid(True, linestyle="--", alpha=0.6)
@@ -370,7 +370,7 @@ class EnergyConsumptionSimulation:
         ax1.set_xlim(-1, len(months))
 
         # Configuración inicial del subplot 2 (Generación solar)
-        ax2.set_title("Generación de energía solar mensual", fontsize=16)
+        ax2.set_title("Generación de energía solar anual", fontsize=16)
         ax2.set_xlabel("Meses", fontsize=14)
         ax2.set_ylabel("Generación (kWh)", fontsize=14)
         ax2.grid(True, linestyle="--", alpha=0.6)
@@ -389,7 +389,7 @@ class EnergyConsumptionSimulation:
                 color="b",
                 label="Consumo de energía (kWh)",
             )
-            ax1.set_title(f"Consumo de energía mensual. Año: {year}", fontsize=16)
+            ax1.set_title(f"Consumo de energía anual. Año: {year}", fontsize=16)
             ax1.set_xlabel("Meses", fontsize=14)
             ax1.set_ylabel("Consumo (kWh)", fontsize=14)
             ax1.grid(True, linestyle="--", alpha=0.6)
@@ -407,7 +407,7 @@ class EnergyConsumptionSimulation:
                 color="g",
                 label="Generación de energía solar (kWh)",
             )
-            ax2.set_title("Generación de energía solar mensual", fontsize=16)
+            ax2.set_title("Generación de energía solar anual", fontsize=16)
             ax2.set_xlabel("Meses", fontsize=14)
             ax2.set_ylabel("Generación (kWh)", fontsize=14)
             ax2.grid(True, linestyle="--", alpha=0.6)
@@ -416,8 +416,8 @@ class EnergyConsumptionSimulation:
             ax2.set_xlim(-1, len(months))
             ax2.legend(fontsize=12)
 
-            # Configuración del subplot 3 (Energía satisfecha y no satisfecha mensual)
-            ax3.set_title("Energía satisfecha y no satisfecha mensual", fontsize=16)
+            # Configuración del subplot 3 (Energía satisfecha y no satisfecha anual)
+            ax3.set_title("Energía satisfecha y no satisfecha anual", fontsize=16)
             ax3.set_xlabel("Meses", fontsize=14)
             ax3.set_ylabel("Energía (kWh)", fontsize=14)
             ax3.grid(True, linestyle="--", alpha=0.6)
