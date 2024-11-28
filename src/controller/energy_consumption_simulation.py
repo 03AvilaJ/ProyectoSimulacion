@@ -1,7 +1,6 @@
 from matplotlib import pyplot as plt
 from matplotlib.widgets import Button
 from ..models import Device, Property, RandomGenerator, SolarPanel, simulate_weather
-from ..views import Menu
 import random
 
 
@@ -9,7 +8,6 @@ class EnergyConsumptionSimulation:
     def __init__(self):
         self.semillas = [77, 13, 55, 20, 90, 4434]
         self.random_generator = RandomGenerator(832262, 1013904223, 32, 500)
-        self.interface_menu = Menu()
         self.device_list = []
         self.consumption_list = []
         self.solar_generation_list = []
