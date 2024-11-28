@@ -206,6 +206,7 @@ class EnergyConsumptionSimulation:
             anual_consume_sum = 0
             solar_panel_consume_yearly = 0
             self.solar_generation_list = []
+            self.consumption_list= []
         self.show_consume_yearly(
             self.consumption_list_yearly,
             self.solar_generation_list_yearly,
